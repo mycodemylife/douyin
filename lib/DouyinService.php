@@ -37,7 +37,6 @@ class DouyinService
     private function getLinkFromDouyinShareText($shareOrUrl)
     {
         preg_match('@[a-zA-z]+://[^\s]*/@',$shareOrUrl,$urlArr);
-        var_dump($urlArr);
         if(empty($urlArr[0])){
             throw new \Exception('不是有效的网址');
         }
