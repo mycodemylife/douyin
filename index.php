@@ -1,6 +1,6 @@
 <?php
 
-require './DouyinService.php';
+require './lib/DouyinService.php';
 
 /**
  * 接口会抛出异常必须捕获
@@ -15,7 +15,7 @@ try{
     }
     $data = $douyin->get($url);
     echo $data;
-    
+
 }catch(Throwable $e){
     echo $e->getMessage();
 }
