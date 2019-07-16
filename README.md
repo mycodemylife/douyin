@@ -1,20 +1,15 @@
 # douyin-clear-php
-抖音去水印PHP版接口  
-原项目地址：https://github.com/zbfzn/douyin-clear-php
-对该项目进行了封装优化
 
-修复5.29无法解析的问题  
-源码已上传  
-19-06-04:接口变更（https://aweme.snssdk.com/aweme/v1/aweme/detail/）  
-19-06-05：新增长视频，userId、抖音id  
-19-06-13：提供几个可用API，在apis.txt里，源代码的api不能使用时换一个即可  
-19-06-25：3种接口失效自动切换（注：官方APP在某些时候也会出现不能解析出视频链接的情况，此情况下若你的APP能识别并解析分享链接，而接口解析不出来的话请反馈给我，接口抓取请参照https://github.com/zbfzn/douyin-clear-php/issues/5 ）  
 
 使用方法：  
 ==
     环境：curl、php（本人v7.3）
     php -S 0.0.0.0:9501   //开启一个http服务并监听9501端口
 	在浏览器 http://localhost:9501/url=http://视频地址/
+
+  复制play_addr列表里的另一链接，
+  然后打列浏览器，按F12(模拟成手机，不然会提示视频不存在)，或直接把连接发到微信里
+  ![效果图](img/1.png)
  ********
  文档： 
  ==
@@ -30,20 +25,36 @@
 请求成功：
 ````json
 {
-"nickname": "捧猫小可爱",
-"shortId": "2012684890",
-"userId": 111005943456,
-"awemeId": "6710895529905245453",
-"headImage": "https://p1-dy.byteimg.com/aweme/720x720/1736f0002e95b88989504.jpeg",
-"image": "http://p3-dy.byteimg.com/large/29ebc00093564bd46b8e0.jpeg",
-"dynamic_cover": "https://p9-dy.byteimg.com/obj/29d5c00029d671ef7ccaa",
-"video_urls": [
-"https://aweme.snssdk.com/aweme/v1/play/?video_id=v0300f980000bkhc8247u4t60lh2rmgg&line=0&ratio=540p&media_type=4&vr_type=0&improve_bitrate=0&is_play_url=1",
-"https://api.amemv.com/aweme/v1/play/?video_id=v0300f980000bkhc8247u4t60lh2rmgg&line=1&ratio=540p&media_type=4&vr_type=0&improve_bitrate=0&is_play_url=1"
+"nickname": "我姓叶", //作者
+"shortId": "16652732",
+"userId": 60718374109, //用户id
+//头像列表
+"avatar": [
+"https://p9-dy.byteimg.com/aweme/720x720/2b2010001212956251bf9.jpeg",
+"https://p1-dy.byteimg.com/aweme/720x720/2b2010001212956251bf9.jpeg",
+"https://p3-dy.byteimg.com/aweme/720x720/2b2010001212956251bf9.jpeg"
 ],
-"long_video": [],
-"music_urls": [
-"http://p3-dy.byteimg.com/obj/ies-music/1638458755001399.mp3"
+//视频信息
+"video": {
+  //封面列表
+"origin_cover": [
+"http://p3-dy.byteimg.com/large/2a79a0004667806257351.jpeg",
+"http://p9-dy.byteimg.com/large/2a79a0004667806257351.jpeg",
+"http://p1-dy.byteimg.com/large/2a79a0004667806257351.jpeg"
+],
+//无水印播放列表
+"play_addr": [
+"http://v1-dy.ixigua.com/e81f31d446898319f343c0b90af355ce/5d2d4745/video/m/220cee9d70f5ff64e7e8e4dd4cc8964bf691162dad7a0000661f4e721803/?rc=amkzb3JlaGs8bjMzaGkzM0ApQHRAbzY1Njw0NTUzNDgzMzk6PDNAKXUpQGczdSlAZjN2KUBmcHcxZnNoaGRmOzRAZmlfaTQ1LW5pXy0tXi0wc3MtbyNvI0I2Ly0vLS4tLTAxLi4tLi9pOmIucCM6YS1xIzpgLW8jYmZoXitqdDojLy5e",
+"http://v3-dy.ixigua.com/d36c00bb3a46052a13b5dab708a03057/5d2d4745/video/m/220cee9d70f5ff64e7e8e4dd4cc8964bf691162dad7a0000661f4e721803/",
+"https://aweme.snssdk.com/aweme/v1/play/?video_id=v0300fae0000bkl9qh0e8b7ollb0lfig&line=0&ratio=540p&media_type=4&vr_type=0&improve_bitrate=0&is_play_url=1",
+"https://api.amemv.com/aweme/v1/play/?video_id=v0300fae0000bkl9qh0e8b7ollb0lfig&line=1&ratio=540p&media_type=4&vr_type=0&improve_bitrate=0&is_play_url=1"
+],
+//长视频
+"long_video": null
+},
+//背景音乐播放列表
+"music": [
+"http://p9-dy.byteimg.com/obj/ies-music/1638966034256951.mp3"
 ]
 }
       
@@ -51,33 +62,12 @@
 请求失败：
 ````json
 {
-    "status": false,
-    "message": "地址无效"
-}
-````
-````json
-{
-   "status": false,
-   "message": "抖音接口调用失败"
+    "errcode": -1,
+    "errmsg": "错误提示"
 }
 ````
 
-    参数：
-    status:请求状态码true/false  
-    message:提示文本，返回结果错误时会返回地址信息  
-    nickname:抖音昵称  
-    awemeId：视频资源Id
-    info:视频信息 
-    image:封面图片地址(静态)
-    headImage:用户头像地址  
-    urls:无水印地址  
-    music_urls:音乐原声地址 
-    dynamic_cover:动态封面图（19-06-05加）  
-    long_video:长视频（完整视频信息（19-06-05加）  
-    userId:作者userId（19-06-05加）  
-    shortId：作者抖音Id（19-06-05加）  
-    
-    
+````
    如有间歇性无法使用请反馈给我。经测试，有时候APP也会出现无法解析的情况，这种情况可以换低版本的API试试。    
    鉴于当前版本需手动获取链接，之后会提供更加稳定的方式（动态生成链接）。    
 
