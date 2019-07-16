@@ -40,6 +40,9 @@ class Curl
     {
         $this->debug = $debug;
         $this->init();
+        $ip = $this->Rand_IP();
+        $this->setHeader('CLIENT-IP',$ip);
+        $this->setHeader('X-FORWARDED-FOR',$id);
     }
 
     /**
@@ -248,6 +251,17 @@ class Curl
         //set curl function timeout to $timeout
         curl_setopt($this->ch, CURLOPT_TIMEOUT, $timeout);
         return $this->execute();
+    }
+
+    function Rand_IP(){
+        $ip2id= round(random_int(600000, 2550000) / 10000); //第一种方法，直接生成
+        $ip3id= round(random_int(600000, 2550000) / 10000);
+        $ip4id= round(random_int(600000, 2550000) / 10000);
+        //下面是第二种方法，在以下数据中随机抽取
+        $arr_1 = array("218","218","66","66","218","218","60","60","202","204","66","66","66","59","61","60","222","221","66","59","60","60","66","218","218","62","63","64","66","66","122","211");
+        $randarr= array_rand($arr_1);
+        $ip1id = $arr_1[$randarr];
+        return $ip1id.".".$ip2id.".".$ip3id.".".$ip4id;
     }
 
     /**
