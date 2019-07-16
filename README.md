@@ -1,5 +1,6 @@
 # douyin-clear-php
 
+## 新项目已迁移至 https://github.com/lvyac/douyin
 
 使用方法：  
 ==
